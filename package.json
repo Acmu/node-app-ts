@@ -4,6 +4,9 @@
   "main": "index.js",
   "repository": "git@github.com:Acmu/node-app-ts.git",
   "author": "MinYuan",
+  "scripts": {
+    "s": "ts-node index.ts"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^12.7.2",
