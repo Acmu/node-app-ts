@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import { config, namespace } from './config';
 
 let data: string;
+let isDuplicate: boolean = false;
+const keySet = new Set();
 
 data = `import { getIntl, defineMessages } from '@sc/intl';
 const intl = getIntl();
@@ -20,18 +22,29 @@ export { intlMsg };
 `;
 
 function getData(config: [string, string][], namespace: string) {
-  return config.map(v => {
-    return `  ${v[0]}: {
-    id: '${namespace}:${v[0]}',
-    defaultMessage: '${v[1]}'
+  return config
+    .map(v => {
+      const [id, msg] = v;
+      if (keySet.has(id)) {
+        isDuplicate = true;
+      }
+      keySet.add(id);
+      return `  ${id}: {
+    id: '${namespace}:${id}',
+    defaultMessage: '${msg}'
   },
 `;
-  }).join('');
+    })
+    .join('');
 }
 
-fs.writeFile('./src/intl.js', data, function(err) {
-  if (err) {
-    console.log(err);
-  }
-  console.log('write success 😀');
-});
+if (isDuplicate) {
+  console.error('fail, you have duplicate id 😱');
+} else {
+  fs.writeFile('./src/intl.js', data, function(err) {
+    if (err) {
+      console.log(err);
+    }
+    console.log('write success 😀');
+  });
+}

@@ -1,8 +1,8 @@
 const config: [string, string][] = [
-  ['a', 'b'],
-  ['c', 'd'],
+  ['aaaaaa', 'bbbbbb'],
+  ['cccccc', 'dddd'],
 ];
 
-const namespace = 'event-series';
+const namespace = 'eeeeee';
 
 export { config, namespace };
