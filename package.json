@@ -5,7 +5,7 @@
   "repository": "git@github.com:Acmu/node-app-ts.git",
   "author": "MinYuan",
   "scripts": {
-    "s": "ts-node index.ts"
+    "s": "ts-node ./src/index.ts"
   },
   "license": "MIT",
   "devDependencies": {

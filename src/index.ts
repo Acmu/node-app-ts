@@ -5,19 +5,18 @@ import { config, Intl, namespace } from './config';
 let data: string;
 
 data = `import { getIntl, defineMessages } from '@sc/intl';
-const intl = getIntl()
+const intl = getIntl();
 
 const messages = defineMessages({
 `;
 
 data += getData(config, namespace);
 
-data += `})
+data += `});
 
-export {
-  intl,
-  messages
-}
+const intlMsg = id => intl.formatMessage(messages[id]);
+
+export { intlMsg };
 `;
 
 function getData(config: Intl[], namespace: string) {
@@ -30,7 +29,7 @@ function getData(config: Intl[], namespace: string) {
   }).join('');
 }
 
-fs.writeFile('intl.js', data, function(err) {
+fs.writeFile('./src/intl.js', data, function(err) {
   if (err) {
     console.log(err);
   }
