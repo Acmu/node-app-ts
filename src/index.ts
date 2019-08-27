@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-import { config, Intl, namespace } from './config';
+import { config, namespace } from './config';
 
 let data: string;
 
@@ -19,11 +19,11 @@ const intlMsg = id => intl.formatMessage(messages[id]);
 export { intlMsg };
 `;
 
-function getData(config: Intl[], namespace: string) {
+function getData(config: [string, string][], namespace: string) {
   return config.map(v => {
-    return `  ${v.id}: {
-    id: '${namespace}:${v.id}',
-    defaultMessage: '${v.msg}'
+    return `  ${v[0]}: {
+    id: '${namespace}:${v[0]}',
+    defaultMessage: '${v[1]}'
   },
 `;
   }).join('');
