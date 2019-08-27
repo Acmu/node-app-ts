@@ -1,9 +1,15 @@
+/**
+ * @file 国际化工具方法
+ * @author MinYuan
+ */
+
 import * as fs from 'fs';
 
 import { config, namespace } from './config';
 
 let data: string;
 let isDuplicate: boolean = false;
+let duplicateId: string;
 const keySet = new Set();
 
 data = `import { getIntl, defineMessages } from '@sc/intl';
@@ -27,6 +33,7 @@ function getData(config: [string, string][], namespace: string) {
       const [id, msg] = v;
       if (keySet.has(id)) {
         isDuplicate = true;
+        duplicateId = id;
       }
       keySet.add(id);
       return `  ${id}: {
@@ -39,12 +46,12 @@ function getData(config: [string, string][], namespace: string) {
 }
 
 if (isDuplicate) {
-  console.error('fail, you have duplicate id 😱');
+  console.error(`Failed beacuse of duplicate id '${duplicateId}' 😱`);
 } else {
   fs.writeFile('./src/intl.js', data, function(err) {
     if (err) {
       console.log(err);
     }
-    console.log('write success 😀');
+    console.log('Write success 😀');
   });
 }
