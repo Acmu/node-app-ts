@@ -13,6 +13,7 @@ let duplicateId: string;
 const keySet = new Set();
 
 data = `import { getIntl, defineMessages } from '@sc/intl';
+
 const intl = getIntl();
 
 const messages = defineMessages({
