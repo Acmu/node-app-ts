@@ -23,9 +23,10 @@ data += getData(config, namespace);
 
 data += `});
 
-const intlMsg = id => intl.formatMessage(messages[id]);
+const genIntlFn = dirName => id =>
+  intl.formatMessage(messages[\`\${dirName}__\${id}\`]);
 
-export { intlMsg };
+export { genIntlFn };
 `;
 
 function getDataItem({ namespace, uniqueKey, msg }) {
@@ -40,10 +41,11 @@ function getData(config: Intl[], namespace: string) {
   return config
     .map(v => {
       const { dir, data } = v;
+      const dirName = typeof dir === 'string' ? dir : dir.join('__')
       return data
         .map(dataItem => {
           const [id, msg] = dataItem;
-          const uniqueKey = `${dir}__${id}`;
+          const uniqueKey = `${dirName}__${id}`;
           if (keySet.has(uniqueKey)) {
             isDuplicate = true;
             duplicateId = uniqueKey;
