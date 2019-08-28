@@ -5,7 +5,7 @@
 
 import * as fs from 'fs';
 
-import { config, namespace } from './config';
+import { config, namespace, Intl } from './config';
 
 let data: string;
 let isDuplicate: boolean = false;
@@ -28,20 +28,30 @@ const intlMsg = id => intl.formatMessage(messages[id]);
 export { intlMsg };
 `;
 
-function getData(config: [string, string][], namespace: string) {
-  return config
-    .map(v => {
-      const [id, msg] = v;
-      if (keySet.has(id)) {
-        isDuplicate = true;
-        duplicateId = id;
-      }
-      keySet.add(id);
-      return `  ${id}: {
-    id: '${namespace}:${id}',
+function getDataItem({ namespace, uniqueKey, msg }) {
+  return `  ${uniqueKey}: {
+    id: '${namespace}:${uniqueKey}',
     defaultMessage: '${msg}'
   },
 `;
+}
+
+function getData(config: Intl[], namespace: string) {
+  return config
+    .map(v => {
+      const { dir, data } = v;
+      return data
+        .map(dataItem => {
+          const [id, msg] = dataItem;
+          const uniqueKey = `${dir}__${id}`;
+          if (keySet.has(uniqueKey)) {
+            isDuplicate = true;
+            duplicateId = uniqueKey;
+          }
+          keySet.add(uniqueKey);
+          return getDataItem({ namespace, uniqueKey, msg });
+        })
+        .join('');
     })
     .join('');
 }
